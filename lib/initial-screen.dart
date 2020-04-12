@@ -1,4 +1,6 @@
-import 'dart:wasm';
+//import 'dart:wasm';
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'utils.dart';
 import 'package:brahm_books/test.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +17,6 @@ import 'login-page.dart';
 import 'otp_verify_screen.dart';
 
 final myControlph1 = TextEditingController();
-final myControlname1 = TextEditingController();
 final myControlph = TextEditingController();
 final myControlname = TextEditingController();
 
@@ -32,7 +33,9 @@ void main() => runApp(TyApp());
 class TyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    log('came to if');
     if (read_uid() == '0') {
+      log("\n\nO is read_uid\n\n");
       Future<http.Response> fetchPost() async {
         //<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
       var response = await http
@@ -42,12 +45,21 @@ class TyApp extends StatelessWidget {
       if (jsresp['result'] as bool == true){
         save_deviceid(jsresp['deviceuid']);
       }else{
+        Fluttertoast.showToast(msg: "check your network!!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.grey,
+            textColor: Colors.white,
+            fontSize: 16.0);
         throw Exception("This is a crash!");
       }
       }
 
     }
-// parth bhaiya this is the code              are you able to see?              the map code is here
+
+    log("Bypass 'if'");
+
     return MaterialApp(
       home: Scaffold(
           appBar: CupertinoNavigationBar(
@@ -155,7 +167,7 @@ class Login extends StatelessWidget {
                     margin:
                         const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Text(
-                      "Phone number should contain country code and no symbols or whitespace",
+                      "Phone number should contain no symbols or whitespace",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.red),
                     ))),
@@ -198,7 +210,8 @@ class Signup extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: TextField(
-                  maxLength: 12,
+
+                  maxLength: 10,
                   controller: myControlph,
                   keyboardType: TextInputType.phone,
                   style: Theme.of(context).textTheme.display1,
@@ -217,7 +230,7 @@ class Signup extends StatelessWidget {
                     margin:
                         const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Text(
-                      "Phone number should contain country code and no symbols or whitespace",
+                      "Phone number should contain no symbols or whitespace",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.red),
                     ))),
@@ -226,8 +239,11 @@ class Signup extends StatelessWidget {
                 child: Directionality(
                   textDirection: TextDirection.ltr,
                   child: TextField(
+                    textCapitalization: TextCapitalization.words,
+
                     maxLength: 1024,
                     keyboardType: TextInputType.text,
+                    controller: myControlname,
                     style: Theme.of(context).textTheme.display1,
                     decoration: InputDecoration(
                       labelText: 'name',
@@ -242,29 +258,66 @@ class Signup extends StatelessWidget {
                 margin: const EdgeInsets.all(10),
                 child: CupertinoButton(
                     color: CupertinoColors.activeBlue,
-                    child: Text("verify!"),
+                    child: Text("Sign-up!"),
                     onPressed: () {
-                      Future<http.Response> fetchPost2() async {
-                        //<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts])
-                        var response = await http
-                            .get('brahm.ai/brahm/brahm_books/signup_api.py?phone='+myControlph.text+'&name='+myControlname.text+'&deviceuid='+read_uid());
-                        Map jsresp = json.decode(response.body);
-                        var jsd = Post.fromJson(jsresp);
-                        if (jsresp['result'] as bool == true){
-                          save_deviceid(jsresp['deviceuid']);
-                        }else{
-                          throw Exception("This is a crash!");
+                      bool PhoneValid = RegExp(r"^[0-9]{10}$").hasMatch(myControlph.text);
+                      if (!PhoneValid) {
+                        Fluttertoast.showToast(msg: "phone number is not valid",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIos: 1,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else if (myControlname.text == ""){
+                        log(myControlname.text);
+                        Fluttertoast.showToast(msg: "Please mention your name",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIos: 1,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        Future<http.Response> fetchPost2() async {
+                          //<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts])
+                          var response = await http
+                              .get(
+                              'brahm.ai/brahm/brahm_books/signup_api.py?phone=' +
+                                  myControlph.text + '&name=' +
+                                  myControlname.text + '&deviceuid=' +
+                                  read_uid());
+                          Map jsresp = json.decode(response.body);
+                          var jsd = Post.fromJson(jsresp);
+                          if (jsresp['result'] as bool == true) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OTP_screen()),
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "An error occured, please report"
+                                    "it to mankash.abhimanyu@gmail.com",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIos: 1,
+                                backgroundColor: Colors.grey,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
                         }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => OTP_screen()),
+                        );
                       }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OTP_screen()),
-                      );
                     }))
           ],
         ));
   }
 }
+
 
 /*class otp extends StatelessWidget {
   @override
