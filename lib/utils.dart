@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:developer';
 
 
 read_user() async {
@@ -27,5 +27,7 @@ save_deviceid(deviceuid) async {
 read_uid() async {
   final prefs = await SharedPreferences.getInstance();
   final key = 'deviceuid';
-  prefs.getString(key) ?? '0';
+  final out = prefs.getString(key) ?? '0';
+  log(out);
+  return out;
   }

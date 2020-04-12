@@ -96,7 +96,9 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                       child: Container(
                     padding: const EdgeInsets.all(10),
-                    child: RaisedButton(
+                    child: ClipRRect(
+                        borderRadius:  BorderRadius.all(Radius.circular(25)),
+                        child: RaisedButton(
                         color: CupertinoColors.activeBlue,
                         onPressed: () {
                           Navigator.push(
@@ -104,12 +106,14 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => Signup()),
                           );
                         },
-                        child: Text('Signup')),
+                        child: Text('Signup'))),
                   )),
                   Expanded(
                     child: Container(
                         padding: const EdgeInsets.all(10),
-                        child: RaisedButton(
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            child: RaisedButton(
                           child: Text('Login'),
                           color: CupertinoColors.activeBlue,
                           onPressed: () {
@@ -118,7 +122,7 @@ class HomeScreen extends StatelessWidget {
                               MaterialPageRoute(builder: (context) => Login()),
                             );
                           },
-                        )),
+                        ))),
                   ),
                 ],
               )))
@@ -281,6 +285,10 @@ class Signup extends StatelessWidget {
                       } else {
                         Future<http.Response> fetchPost2() async {
                           //<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts])
+                          log('brahm.ai/brahm/brahm_books/signup_api.py?phone=' +
+                                  myControlph.text + '&name=' +
+                                  myControlname.text + '&deviceuid=' +
+                                  read_uid());
                           var response = await http
                               .get(
                               'brahm.ai/brahm/brahm_books/signup_api.py?phone=' +

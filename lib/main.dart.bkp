@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:floating_search_bar/floating_search_bar.dart';
 import 'dart:async';
@@ -9,7 +9,6 @@ import 'dart:developer';
 import 'utils.dart';
 import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 
@@ -24,77 +23,82 @@ class MyApp extends StatefulWidget {
 LatLng _center = LatLng(71.43, 56.43);
 class _MyAppState extends State<MyApp> {
 
-  GoogleMapController mapController;
-  Widget _child;
-  Position position;
+/*  LocationResult locations = null;
+  StreamSubscription<LocationResult> streamSubscription;
+  bool trackLocation = false;
+  */
+
+//bhaiya, maza nahi aara, let's do voice call        after lunch. parth bhaiya, lunch break?
+//continue  n 1:35.you avaiable then?
+//yes.great.bye            bye   i am going                            yeah ok
   @override
-  void initState() {
-    _child =
-      Column(children: <Widget>[
-        Spacer(flex:1),
-      Flexible(
-          flex: 2,
-          child: Center(child:Container(
-            color: CupertinoColors.white,
-            child: SpinKitCircle(
-      color: CupertinoColors.black,
-      size: 250.0,
-        )),)),
-        Flexible(
-          flex: 1,
-          child: Center(child: Text("Is location turned on?"))),
-        ]);
+  initState() {
     super.initState();
-    getCurrentLocation();
+   // if (checkGps()) {
+  /*    trackLocation = false;
+      locations = null;
+      //log(getLocations()[0].toString());
+        getLocations();
+        if (_center == null){
+          _center = LatLng(71.3213, 56.1);
+          log("null location");
+        }
+        log("center obj: " + _center.toString());
+   */
+  //    }
   }
 
 
-  void getCurrentLocation() async {
-    Position res = await Geolocator().getCurrentPosition();
-    setState(() {
-      position = res;
-      _child = mapWidget();
-    });
+
+
+ /* dynamic getLocations() {
+    if (trackLocation) {
+      setState(() => trackLocation = false);
+      streamSubscription.cancel();
+      streamSubscription = null;
+      locations = null;
+ //     return LatLng(1,1);
+    } else {
+      log("success!!!!");
+      setState(() => trackLocation = true);
+
+      streamSubscription = Geolocation.locationUpdates(
+        accuracy: LocationAccuracy.best,
+        displacementFilter: 0.0,
+        inBackground: false,
+      ).listen((result) {
+        final location = result;
+        setState(() {
+          locations = location;
+          _center = LatLng(location.location.latitude, location.location.longitude);
+        });
+        log(location.location.latitude.toString());
+        log(location.location.longitude.toString());
+        //return LatLng(location.location.latitude,  location.location.longitude);
+      });
+
+      streamSubscription.onDone(() =>
+          setState(() {
+            trackLocation = false;
+          }));
+    }
   }
 
+*/
+  GoogleMapController mapController;
+
+
+// you have used google maps API? Kanha? yes we have used google's a
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
 
-  /*Set<Marker> _createMarker() {
-    return <Marker>[
-      Marker(
-        markerId: MarkerId("Me"),
-        position: LatLng(position.latitude, position.longitude),
-        icon: BitmapDescriptor.defaultMarker,
-        infoWindow: InfoWindow(title: "Me"),
-      ),
-    ].toSet();
-  }
-*/
-
-  Widget mapWidget(){
-    return GoogleMap(
-      indoorViewEnabled: true,
-      mapType: MapType.terrain,
-      buildingsEnabled: true,
-      compassEnabled: true,
-  //    markers: _createMarker(),
-      onMapCreated: _onMapCreated,
-      myLocationButtonEnabled: false,
-      myLocationEnabled: true,
-      initialCameraPosition: CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 15,
-      ),
-    );
-  }
+  Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -102,7 +106,6 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
         ),
         home: Scaffold(
-
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
@@ -131,8 +134,16 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               // Replace this container with your Map widget
               Container(
-                child: _child,
+                child: GoogleMap(
+                  mapType: MapType.terrain,
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11,
+                  ),
+                ),
               ),
+
               Positioned(
                 top: 40,
                 right: 15,
@@ -183,10 +194,22 @@ class _MyAppState extends State<MyApp> {
             ],
           ),
         )
+      //    ]),
+      //     child: bottomAppBarContents,
+
+      //       floatingActionButton: FloatingActionButton(onPressed: null),
     );
   }
 }
 
+checkGps() async {
+  final GeolocationResult result = await Geolocation.isLocationOperational();
+  if (result.isSuccessful) {
+    return true;
+  } else {
+    return false;
+  }
+}
 class help extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
