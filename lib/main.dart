@@ -11,43 +11,40 @@ import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+void main() {
+  runApp(MyApp());
+}
 
-
-
-void main(){
-    runApp(MyApp());
-  }
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-LatLng _center = LatLng(71.43, 56.43);
-class _MyAppState extends State<MyApp> {
 
+LatLng _center = LatLng(71.43, 56.43);
+
+class _MyAppState extends State<MyApp> {
   GoogleMapController mapController;
   Widget _child;
   Position position;
   @override
   void initState() {
-    _child =
-      Column(children: <Widget>[
-        Spacer(flex:1),
+    _child = Column(children: <Widget>[
+      Spacer(flex: 1),
       Flexible(
           flex: 2,
-          child: Center(child:Container(
-            color: CupertinoColors.white,
-            child: SpinKitCircle(
-      color: CupertinoColors.black,
-      size: 250.0,
-        )),)),
-        Flexible(
-          flex: 1,
-          child: Center(child: Text("Is location turned on?"))),
-        ]);
+          child: Center(
+            child: Container(
+                color: CupertinoColors.white,
+                child: SpinKitCircle(
+                  color: CupertinoColors.black,
+                  size: 250.0,
+                )),
+          )),
+      Flexible(flex: 1, child: Center(child: Text("Is location turned on?"))),
+    ]);
     super.initState();
     getCurrentLocation();
   }
-
 
   void getCurrentLocation() async {
     Position res = await Geolocator().getCurrentPosition();
@@ -61,7 +58,6 @@ class _MyAppState extends State<MyApp> {
     mapController = controller;
   }
 
-
   /*Set<Marker> _createMarker() {
     return <Marker>[
       Marker(
@@ -74,13 +70,13 @@ class _MyAppState extends State<MyApp> {
   }
 */
 
-  Widget mapWidget(){
+  Widget mapWidget() {
     return GoogleMap(
       indoorViewEnabled: true,
       mapType: MapType.terrain,
       buildingsEnabled: true,
       compassEnabled: true,
-  //    markers: _createMarker(),
+      //    markers: _createMarker(),
       onMapCreated: _onMapCreated,
       myLocationButtonEnabled: false,
       myLocationEnabled: true,
@@ -94,7 +90,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -102,8 +98,41 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
         ),
         home: Scaffold(
+          key: _scaffoldKey,
+          drawer: new Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Text("drawer  head hahahah"),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                ),
+                ListTile(
+                  title: Text("Item 1"),
+                ),
+                ListTile(
+                  title: Text("Item 2"),
+                ),
+                ListTile(
+                  title: Text("Item 3"),
+                ),
+                ListTile(
+                  title: Text("Item 4"),
+                ),
+                ListTile(
+                  title: Text("Item 5"),
+                ),
+                ListTile(
+                  title: Text("Item 6"),
+                ),
 
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              ],
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {},
@@ -114,8 +143,8 @@ class _MyAppState extends State<MyApp> {
               BottomNavigationBarItem(
                 icon: new IconButton(
                     icon: Icon(
-                      Icons.book,
-                    )),
+                  Icons.book,
+                )),
                 title: new Text('Get'),
               ),
               BottomNavigationBarItem(
@@ -144,8 +173,12 @@ class _MyAppState extends State<MyApp> {
                       Padding(
                         padding: const EdgeInsets.only(left: 15),
                         child: Opacity(
-                          child: IconButton(icon: Icon(Icons.menu),
-                            onPressed: (){},),
+                          child: IconButton(
+                            icon: Icon(Icons.menu),
+                            onPressed: () {
+                              _scaffoldKey.currentState.openDrawer();
+                            },
+                          ),
                           opacity: 0.5,
                         ),
                       ),
@@ -157,7 +190,7 @@ class _MyAppState extends State<MyApp> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15),
+                                EdgeInsets.symmetric(horizontal: 15),
                             hintText: "Search here",
                           ),
                         ),
@@ -182,14 +215,17 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
-class help extends StatelessWidget{
+class help extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(appBar: AppBar(),),);
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(),
+      ),
+    );
   }
 }
