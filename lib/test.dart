@@ -1,99 +1,74 @@
 import 'package:flutter/material.dart';
-/*import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocation/geolocation.dart';
-import 'dart:async';
+import 'package:flutter/cupertino.dart';
 
-void main() => runApp(new MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Location Example',
-      theme: ThemeData.dark(),
-      home: Home(),
-    );
-  }
+void main() {
+  runApp(MyApp());
 }
 
-class Home extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
-  HomeState createState() => HomeState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class HomeState extends State<Home> {
-  LocationResult locations = null;
-  StreamSubscription<LocationResult> streamSubscription;
-  bool trackLocation = false;
 
-  @override
-  initState() {
-    super.initState();
-    checkGps();
-
-    trackLocation = false;
-    locations = null;
-  }
-
-  getLocations() {
-    if (trackLocation) {
-      setState(() => trackLocation = false);
-      streamSubscription.cancel();
-      streamSubscription = null;
-      locations = null;
-    } else {
-      setState(() => trackLocation = true);
-
-      streamSubscription = Geolocation
-          .locationUpdates(
-        accuracy: LocationAccuracy.best,
-        displacementFilter: 0.0,
-        inBackground: false,
-      )
-          .listen((result) {
-        final location = result;
-        setState(() {
-          locations = location;
-        });
-      });
-
-      streamSubscription.onDone(() => setState(() {
-        trackLocation = false;
-      }));
-    }
-  }
-
-  checkGps() async {
-    final GeolocationResult result = await Geolocation.isLocationOperational();
-    if (result.isSuccessful) {
-      print("Success");
-    } else {
-      print("Failed");
-    }
-  }
-
+class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('GeoLocation example'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Get Location"),
-            onPressed: getLocations,
-          )
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        items: <BottomNavigationBarItem> [
+          BottomNavigationBarItem(
+            icon: new IconButton(
+                icon: Icon(
+                  Icons.book,
+                )),
+            title: new Text('Get'),
+          ),
+          BottomNavigationBarItem(
+            icon: new IconButton(
+              icon: Icon(Icons.question_answer),
+              onPressed: () {},
+            ),
+            title: new Text('Requests'),
+          ),
         ],
       ),
-      body: Center(
-          child: Container(
-            child: ListView(
-              children: [
-                Image.network(locations == null
-                    ? ""
-                    : "https://maps.googleapis.com/maps/api/staticmap?center=${locations.location.latitude},${locations.location.longitude}&zoom=12&size=400x400&key=<AIzaSyCfRoXVj2EXT3kmGVc13qSm1j4jfW6DCek>")
-              ],
-            ),
-          )),
+      tabBuilder: (BuildContext context, int index) {
+        return CupertinoTabView(
+          builder: (BuildContext context) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                middle: Text('Page 1 of tab $index'),
+              ),
+              child: Center(
+                child: CupertinoButton(
+                  child: const Text('Next page'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return CupertinoPageScaffold(
+                            navigationBar: CupertinoNavigationBar(
+                              middle: Text('Page 2 of tab $index'),
+                            ),
+                            child: Center(
+                              child: CupertinoButton(
+                                child: const Text('Back'),
+                                onPressed: () { Navigator.of(context).pop(); },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
-}*/
+}

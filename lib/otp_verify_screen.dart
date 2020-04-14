@@ -1,4 +1,4 @@
-import 'dart:wasm';
+//import 'dart:wasm';
 
 import 'package:flutter/cupertino.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
