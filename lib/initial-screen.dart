@@ -154,7 +154,7 @@ class Login extends StatelessWidget {
                   textDirection: TextDirection.ltr,
                   child: TextField(
                     controller: myControlph,
-                    maxLength: 12,
+                    maxLength: 10,
                     keyboardType: TextInputType.phone,
                     style: Theme.of(context).textTheme.display1,
                     decoration: InputDecoration(
@@ -180,11 +180,22 @@ class Login extends StatelessWidget {
                 child: CupertinoButton(
                     child: Text("verify!"),
                     color: CupertinoColors.activeBlue,
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () {bool PhoneValid = RegExp(r"^[0-9]{10}$").hasMatch(myControlph.text);
+                    if (!PhoneValid) {
+                      Fluttertoast.showToast(msg: "phone number is not valid",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIos: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }else{
+
+                    Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => OTP_screen()),
                       );
+                    }
                     })),
           ],
         ));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import "package:flutter/cupertino.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:floating_search_bar/floating_search_bar.dart';
 import 'dart:async';
 import 'package:geolocation/geolocation.dart';
@@ -10,7 +10,8 @@ import 'utils.dart';
 import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:flutter_tags/flutter_tags.dart';
+final myControlfedback = TextEditingController();
 final myControlhelp = TextEditingController();
 void main() {
   runApp(MyApp());
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           child: Center(
             child: Container(
                 color: CupertinoColors.white,
-                child: SpinKitCircle(
+                child: SpinKitChasingDots(
                   color: CupertinoColors.black,
                   size: 250.0,
                 )),
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
     getCurrentLocation();
   }
 
+  // you told you will help me in tags!!!!
   void getCurrentLocation() async {
     Position res = await Geolocator().getCurrentPosition();
     setState(() {
@@ -71,7 +73,7 @@ class _MyAppState extends State<MyApp> {
   }
 */
 
-  Widget mapWidget() {
+    Widget mapWidget() {
     return GoogleMap(
       indoorViewEnabled: true,
       mapType: MapType.terrain,
@@ -110,24 +112,26 @@ class _MyAppState extends State<MyApp> {
                       Container(
                           height: 300,
                           child: DrawerHeader(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top:60, bottom: 30),
-                          child: CircleAvatar(
-                            backgroundColor: CupertinoColors.white,
-                            child: Text('ME',
-                                style: TextStyle(height: 1, fontSize: 50, color: CupertinoColors.black)),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          //color: Colors.black12,
-                          gradient: LinearGradient(
-                            colors: [
-                              CupertinoColors.activeBlue,
-                              Colors.blue[400],
-                            ]
-                          ),
-                        ),
-                      )),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 60, bottom: 30),
+                              child: CircleAvatar(
+                                backgroundColor: CupertinoColors.white,
+                                child: Text('AM',
+                                    style: TextStyle(
+                                        height: 1,
+                                        fontSize: 50,
+                                        color: CupertinoColors.black)),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              //color: Colors.black12,
+                              gradient: LinearGradient(colors: [
+                                CupertinoColors.activeBlue,
+                                Colors.blue[400],
+                              ]),
+                            ),
+                          )),
                       ListTile(
                         title: Text("Item 1"),
                       ),
@@ -151,6 +155,15 @@ class _MyAppState extends State<MyApp> {
                       ListTile(
                         title: Text("Item 6"),
                       ),
+                      ListTile(
+                        title: Text("Item 7"),
+                      ),
+                      ListTile(
+                        title: Text("Item 8"),
+                      ),
+                      ListTile(
+                        title: Text("Item 9"),
+                      ),
                     ],
                   ),
                 ),
@@ -160,23 +173,28 @@ class _MyAppState extends State<MyApp> {
                   child: const Icon(Icons.add),
                   onPressed: () {},
                 ),
-                bottomNavigationBar: CupertinoTabBar(
+                bottomNavigationBar: BottomNavigationBar(
                   currentIndex: 0, // this will be set when a new tab is tapped
                   items: [
                     BottomNavigationBarItem(
-                      icon: new IconButton(
-                          icon: Icon(
-                        Icons.book,
-                      )),
-                      title: new Text('Get'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: new IconButton(
+                      title: IconButton(
                         icon: Icon(Icons.question_answer),
                         onPressed: () {},
+                        tooltip: "requests",
                       ),
-                      title: new Text('Requests'),
+                      icon: IconButton(tooltip: "Get", icon: Icon(Icons.book)),
                     ),
+                    BottomNavigationBarItem(
+                        title: IconButton(
+                          icon: Icon(Icons.question_answer),
+                          onPressed: () {},
+                          tooltip: "requests",
+                        ),
+                        icon: IconButton(
+                          icon: Icon(Icons.question_answer),
+                          onPressed: () {},
+                          tooltip: "requests",
+                        )),
                   ],
                 ),
                 body: TabBarView(
@@ -200,6 +218,7 @@ class _MyAppState extends State<MyApp> {
                                     padding: const EdgeInsets.only(left: 15),
                                     child: Opacity(
                                       child: IconButton(
+                                        tooltip: "menu",
                                         icon: Icon(Icons.menu),
                                         onPressed: () {
                                           _scaffoldKey.currentState
@@ -232,8 +251,9 @@ class _MyAppState extends State<MyApp> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: CircleAvatar(
-                                      backgroundColor: CupertinoColors.activeBlue,
-                                      child: Text('ME'),
+                                      backgroundColor:
+                                          CupertinoColors.activeBlue,
+                                      child: Text('AM'),
                                     ),
                                   ),
                                 ],
@@ -252,9 +272,7 @@ class help extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      appBar: CupertinoNavigationBar(
-          middle: Text("Help")
-      ),
+      appBar: CupertinoNavigationBar(middle: Text("Help")),
       body: Column(
         children: <Widget>[
           Container(
@@ -262,7 +280,6 @@ class help extends StatelessWidget {
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: TextField(
-                maxLength: 10,
                 controller: myControlhelp,
                 keyboardType: TextInputType.text,
                 style: Theme.of(context).textTheme.display1,
@@ -276,8 +293,42 @@ class help extends StatelessWidget {
               ),
             ),
           ),
+          RaisedButton(child: Text("Send!!!")),
         ],
       ),
     ));
+  }
+}
+
+class feedback extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: TextField(
+                  controller: myControlfedback,
+                  keyboardType: TextInputType.text,
+                  style: Theme.of(context).textTheme.display1,
+                  decoration: InputDecoration(
+                    labelText: 'feedback',
+                    labelStyle: Theme.of(context).textTheme.display1,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            RaisedButton(child: Text("Send!!!!")),
+          ],
+        ),
+      ),
+    );
   }
 }
