@@ -1,12 +1,14 @@
 //import 'dart:wasm';
-
+import "package:flutter/material.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'initial-screen.dart';
+import 'package:http/http.dart' as http;
 import 'main.dart';
 import 'dart:developer';
+import 'utils.dart';
+import 'dart:convert';
 
 void main() => about();
 
@@ -39,12 +41,8 @@ class OTP_screen extends StatelessWidget {
             margin: const EdgeInsets.only(top: 40),
             child: PinEntryTextField(
               fields: 6,
-              onSubmit: (String pin) {
-                log("MyApp push");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
-                );
+              onSubmit: (pin) {
+                otpfetchpost(context, pin);
               },
             ),
           ),
@@ -56,7 +54,12 @@ class OTP_screen extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => whyotp()),
                     );
-                  }))
+                  })),
+          Center(
+            child: CupertinoButton(child: Text("Resend otp"), onPressed: (){
+              resendotpfetchpost();
+            }),
+          )
         ]));
   }
 }
@@ -116,8 +119,7 @@ class about extends StatelessWidget {
                   "Brahm Books is a all-in-one books app where you can exchange your books in your neighbourhood. Brahm books allows you to exchange books around you."
                   "Brahm Books is free. Brahm Books gets you books you need for books you have read. Brahm Books is the best place for your books."
                   "\n\n Brahm books is developed and maintained by brahm.ai. Brahm Books is releasing borrow and but options in Brahm Books soon. Stay tuned for more...",
-              textAlign: TextAlign.center)
-          ),
+                  textAlign: TextAlign.center)),
         ]));
   }
 }
