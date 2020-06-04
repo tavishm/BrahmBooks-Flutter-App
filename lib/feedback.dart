@@ -52,7 +52,8 @@ class feedback extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top:30, bottom: 30, left: 15, right: 15),
+              margin: const EdgeInsets.only(
+                  top: 30, bottom: 30, left: 15, right: 15),
               child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: TextField(
@@ -82,7 +83,8 @@ class feedback extends StatelessWidget {
                         onPressed: () {
                           showtoast(
                               "we will respond to you as soon as possible");
-                          feedbackfetchpost(myControlfeedback.text, myControlemailforfeedback.text);
+                          feedbackfetchpost(myControlfeedback.text,
+                              myControlemailforfeedback.text);
                         }),
                   ))
                 ],

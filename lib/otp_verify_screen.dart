@@ -56,9 +56,11 @@ class OTP_screen extends StatelessWidget {
                     );
                   })),
           Center(
-            child: CupertinoButton(child: Text("Resend otp"), onPressed: (){
-              resendotpfetchpost();
-            }),
+            child: CupertinoButton(
+                child: Text("Resend otp"),
+                onPressed: () {
+                  resendotpfetchpost();
+                }),
           )
         ]));
   }

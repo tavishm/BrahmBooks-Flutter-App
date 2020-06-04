@@ -19,11 +19,16 @@ class example extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
           ]),
-              Text(""),
-
-              Text("distance: 40m ",              style: TextStyle(fontSize: 15),
-              ),
-          FlatButton( onPressed: ()  {("hahahahah");}, child: Text("Exchange!"))
+          Text(""),
+          Text(
+            "distance: 40m ",
+            style: TextStyle(fontSize: 15),
+          ),
+          FlatButton(
+              onPressed: () {
+                ("hahahahah");
+              },
+              child: Text("Exchange!"))
         ])),
       ),
     );

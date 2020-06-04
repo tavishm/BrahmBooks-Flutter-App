@@ -1,4 +1,3 @@
-//import 'dart:wasm';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'utils.dart';
@@ -9,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:flutter/rendering.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'signup-page.dart';
 import 'main.dart';
-import 'login-page.dart';
 import 'otp_verify_screen.dart';
 
 var dummy_api = "http://192.168.1.110:8000";
@@ -31,20 +28,7 @@ class TyApp extends StatelessWidget {
     log("Bypass 'if'");
 
     return MaterialApp(
-      home: Scaffold(
-          appBar: CupertinoNavigationBar(
-            middle: Text("Brahm Books"),
-            trailing: IconButton(
-              icon: Icon(Icons.help_outline),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => about()),
-                );
-              },
-            ),
-          ),
-          body: new HomeScreen()),
+      home: HomeScreen(),
     );
   }
 }
@@ -52,7 +36,20 @@ class TyApp extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
+    return  Scaffold(
+        appBar: CupertinoNavigationBar(
+          middle: Text("Brahm Books"),
+          trailing: IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => about()),
+              );
+            },
+          ),
+        ),
+        body: Column(children: <Widget>[
       // Row(children: <Widget>[
       Center(
         child: Image.asset('images/book_op_2.png'),
@@ -98,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               )))
-    ]);
+    ]));
   }
 }
 
@@ -166,7 +163,8 @@ class Login extends StatelessWidget {
                             textColor: Colors.white,
                             fontSize: 16.0);
                       } else {
-                        login_fetch_post(context, myControlph);
+                        login_fetch_post(context, myControlph.text);
+                        log("login fetchPost is running!!!");
                       }
                     })),
           ],
@@ -269,7 +267,7 @@ class Signup extends StatelessWidget {
                             textColor: Colors.white,
                             fontSize: 16.0);
                       } else {
-                        signup_fetchpost(context, myControlph.text, myControlph.text);
+                        signup_fetchpost(context, myControlph.text, myControlname.text);
                       }
                     }))
           ],
@@ -277,68 +275,7 @@ class Signup extends StatelessWidget {
   }
 }
 
-/*class otp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: CupertinoNavigationBar(
-          middle: Text("Brahm Books"),
-          trailing: IconButton(
-            icon: Icon(Icons.help_outline),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => about()),
-              );
-            },
-          ),
-        ),
-        body: Scaffold(
-          appBar: CupertinoNavigationBar(middle: Text("Verify OTP")),
-          body: Column(
-            children: <Widget>[
-              Text('verify your otp'),
-              Center(
-                  child: TextField(
-                keyboardType: TextInputType.number,
-                maxLength: 6,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: '__ __ __ __ __ __'),
-              )),
-              CupertinoButton(
-                  color: CupertinoColors.activeBlue,
-                  child: Text("verify!"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  })
-            ],
-          ),
-        ));
-  }                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      } else if (myControlname.text == ""){
-                        log(myControlname.text);
-                        Fluttertoast.showToast(msg: "Please mention your name",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIos: 1,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      } else {
-                        Future<http.Response> fetchPost2() async {
-                          //<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts])
-                          log('brahm.ai/brahm/brahm_books/signup_api.py?phone=' +
-                                  myControlph.text + '&name=' +
-                                  myControlname.text + '&deviceuid=' +
-                                  read_uid());
-                          var response = await http
 
-}
-*/
 
 class Post {
 //  final String fulltext;

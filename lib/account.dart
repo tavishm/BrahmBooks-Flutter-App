@@ -12,15 +12,28 @@ import 'package:flutter/material.dart';
 import 'otp_verify_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:convert';
+import 'main.dart';
 
 var dummy_api = "192.168.1.110:8000";
 var myControlnamechange = TextEditingController();
+
 
 void main() {
   runApp(profile());
 }
 
-class profile extends StatelessWidget {
+class profile extends StatefulWidget {
+  @override
+  _profileState createState() => _profileState();
+}
+
+class _profileState extends State<profile> {
+  @override
+  Future<void> initState() {
+    super.initState();
+    firsttwolettersofname();
+  }
+
   @override
   Widget build(context) {
     return MaterialApp(
@@ -34,7 +47,7 @@ class profile extends StatelessWidget {
               child: CircleAvatar(
             radius: 100,
             backgroundColor: CupertinoColors.black,
-            child: Text('AM',
+            child: Text(firstdigs_main,
                 style: TextStyle(
                     height: 1, fontSize: 50, color: CupertinoColors.white)),
           )),
@@ -60,9 +73,11 @@ class profile extends StatelessWidget {
                     Expanded(
                         child: Padding(
                       padding: const EdgeInsets.all(10),
-                      child: RaisedButton(child: Text("Submit"), onPressed: () {
-            editnamefetchpost();
-              }),
+                      child: RaisedButton(
+                          child: Text("Submit"),
+                          onPressed: () {
+                            editnamefetchpost();
+                          }),
                     )),
                     Expanded(
                         child: Padding(
@@ -70,7 +85,7 @@ class profile extends StatelessWidget {
                             child: RaisedButton(
                                 child: Text("Logout"),
                                 onPressed: () {
-                                 logoutfetchpost();
+                                  logoutfetchpost();
                                 })))
                   ]))),
         ],
