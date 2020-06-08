@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:bubble/bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -111,6 +111,9 @@ Future<List> nearby_alphabetic_books(query) async {
 Future<List> easyrequestpagefetchpost() async {
   var deviceuid = await read_deviceuid();
   log(deviceuid);
+  log(dummy_api +
+      '/easyfeedpage/?deviceuid=' +
+      Uri.encodeFull(deviceuid));
   var response = await http.get(dummy_api +
       '/easyfeedpage/?deviceuid=' +
       Uri.encodeFull(deviceuid));
@@ -135,6 +138,66 @@ Future<List> get_feed_currently_search(query) async {
     var nearby_respo = await nearby_alphabetic_books(query);
     return nearby_respo;
   }
+}
+
+Future<String> interprimeinfofetchpost(interprimeid) async {
+  print(interprimeid);
+  var deviceuid = await read_deviceuid();
+  log(dummy_api +
+      '/interprimeinfo/?deviceuid=' +
+      Uri.encodeFull(deviceuid) +
+      '&interprimeid=' +
+      Uri.encodeFull(interprimeid));
+  var response = await http.get(dummy_api +
+      '/interprimeinfo/?deviceuid=' +
+      Uri.encodeFull(deviceuid) +
+      '&interprimeid=' +
+      Uri.encodeFull(interprimeid));
+  log(response.body);
+  Map jsresp = json.decode(response.body);
+  var output = jsresp["entities"]["stage"].toString()+jsresp["entities"]["user"].toString();
+  return output;
+}
+
+Future<Map> stagedactionsapi(stage, secondhelp, {interprimeid=null, interhelpid=null, ownid=null, book1=null}) async {
+  interprimeid = interprimeid.toString();
+  interhelpid = interhelpid.toString();
+  ownid = ownid.toString();
+  book1 = book1.toString();
+  stage = stage.toString();
+  secondhelp = secondhelp.toString();
+  var deviceuid = await read_deviceuid();
+  log(dummy_api +
+      '/stagedactions/?stage=' +
+      Uri.encodeFull(stage) +
+      '&secondhelp=' +
+      Uri.encodeFull(secondhelp) +
+      '&deviceuid=' +
+      Uri.encodeFull(deviceuid) +
+      '&ownid=' +
+      Uri.encodeFull(ownid) +
+      '&interid=' +
+      Uri.encodeFull(interprimeid) +
+      '&interhelpid=' +
+      Uri.encodeFull(interhelpid) +
+      '&book1=' +
+      Uri.encodeFull(book1));
+  http.get(dummy_api +
+      '/stagedactions/?stage=' +
+      Uri.encodeFull(stage) +
+      '&secondhelp=' +
+      Uri.encodeFull(secondhelp) +
+      '&deviceuid=' +
+      Uri.encodeFull(deviceuid) +
+      '&ownid=' +
+      Uri.encodeFull(ownid) +
+      '&interid=' +
+      Uri.encodeFull(interprimeid) +
+      '&interhelpid=' +
+      Uri.encodeFull(interhelpid) +
+      '&book1=' +
+      Uri.encodeFull(book1)
+  );
 }
 
 Future<Map> own_id_info(ownid) async {
@@ -241,9 +304,9 @@ Future<http.Response> otpfetchpost(context, pin) async {
       '&phone=' +
       Uri.encodeFull(phone));
   Map jsresp = json.decode(response.body);
-  var jsd = Post.fromJson(jsresp);
   if (jsresp['result'] as bool == true) {
-    save_deviceuid(jsresp["entities"]);
+    await save_deviceuid(jsresp["entities"]);
+    showtoast("Logging you in...");
     runApp(MyApp());
   } else if (jsresp['entities'] == 'late') {
     showtoast("You answered late.");
@@ -304,8 +367,32 @@ showtoast(message_t) {
       textColor: Colors.white,
       fontSize: 16.0);
 }
+Widget botbubble(child){
+  return Bubble(
+    margin: BubbleEdges.only( top: 10 ),
+    alignment: Alignment.topLeft,
+    nipWidth: 8,
+    nipHeight: 24,
+    nip: BubbleNip.leftTop,
+    color: Color.fromRGBO( 225, 255, 225, 1 ),
+    child: child,
+  );
+}
 
-Future<String> save_deviceuid(deviceuid) async {
+
+Widget userbubble(child){
+  return Bubble(
+    margin: BubbleEdges.only( top: 10 ),
+    alignment: Alignment.topRight,
+    nipWidth: 8,
+    nipHeight: 24,
+    nip: BubbleNip.rightTop,
+    color: Color.fromRGBO( 225, 255, 225, 1.0 ),
+    child: child,
+  );
+}
+
+save_deviceuid(deviceuid) async {
   final prefs = await SharedPreferences.getInstance();
   final key = 'deviceuid';
   prefs.setString(key, deviceuid);
@@ -319,7 +406,7 @@ Future<String> read_deviceuid() async {
   return out;
 }
 
-Future<String> save_phone(phone) async {
+save_phone(phone) async {
   final prefs = await SharedPreferences.getInstance();
   final key = "phone";
   prefs.setString(key, phone);
@@ -333,10 +420,10 @@ Future<String> read_phone() async {
   return out;
 }
 
-Future<String> save_name(MyControlname) async {
+save_name(name) async {
   final prefs = await SharedPreferences.getInstance();
   final key = "name";
-  prefs.setString(key, MyControlname);
+  prefs.setString(key, name);
 }
 
 Future<String> read_name() async {
@@ -352,7 +439,7 @@ void firsttwolettersofname() async {
   firstdigs_main = firstdigs_main.substring(0, 1);
 }
 
-Future<String> save_latlng(lat, lng) async {
+save_latlng(lat, lng) async {
   final prefs = await SharedPreferences.getInstance();
   final key1 = "lat";
   final key2 = "lng";

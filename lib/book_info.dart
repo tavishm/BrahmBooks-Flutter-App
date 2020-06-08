@@ -64,11 +64,12 @@ class BookInfo extends StatelessWidget {
         floatingActionButton: //Row(children: [
           FloatingActionButton.extended(
             onPressed: () {
-              // Add your onPressed code here!
+              stagedactionsapi(1, 0, ownid: infostuff["distances"][0]["ownid"]);
             },
             label: Text('exchange'),
             icon: Icon(Icons.question_answer),
             backgroundColor: Colors.lightGreen,
+
           ),
        /*FloatingActionButton.extended(
             onPressed: () {

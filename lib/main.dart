@@ -18,6 +18,7 @@ import 'initial-screen.dart';
 import "library.dart";
 import "help.dart";
 import "feedback.dart";
+import "conversation.dart";
 import 'package:speech_bubble/speech_bubble.dart';
 import "book_info.dart";
 final myControlfedback = TextEditingController();
@@ -72,6 +73,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getCurrentLocation() async {
+
     Position res = await Geolocator().getCurrentPosition();
     log("post res");
     save_latlng(res.latitude, res.longitude);
@@ -178,11 +180,21 @@ class _MyAppState extends State<MyApp> {
                     "an error occoured. Please report it to tavish.mankash@gmail.com");
                 return Center(child: CupertinoActivityIndicator());
               } else {
-                log("I have come here");
+                log("I have come here conv");
                 return ListView.builder(
                   itemCount: projectSnap.data.length,
                     itemBuilder: (context, index) =>
-                        Padding(
+                        GestureDetector(
+                          onTap: () {
+                            log(projectSnap.data[index]["interprimeid"].toString());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => (ConversationView(
+                                      infostuff: projectSnap.data[index]))),
+                            );
+                          },
+                          child: Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Card(
 
@@ -195,13 +207,13 @@ class _MyAppState extends State<MyApp> {
                             child: ListTile(
                               leading: CircleAvatar(backgroundImage: NetworkImage(projectSnap.data[index]["image"])),
                               title: Text(
-                                projectSnap.data[index]["book2"],
+                                projectSnap.data[index]["show"],
                                 style: Theme.of(context).textTheme.body1,
                               ),
                               subtitle: Text( projectSnap.data[index]["author"],
                                 style: TextStyle(height: 1, fontSize: 10),))
                           ),
-                        ),
+                        )),
                         //Card(children: <Widget> [ Text(),])
                 );
               }
