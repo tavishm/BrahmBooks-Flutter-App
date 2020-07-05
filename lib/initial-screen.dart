@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:flutter/rendering.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'main.dart';
 import 'otp_verify_screen.dart';
 
@@ -26,7 +25,6 @@ class TyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("Bypass 'if'");
-
     return MaterialApp(
       home: HomeScreen(),
     );

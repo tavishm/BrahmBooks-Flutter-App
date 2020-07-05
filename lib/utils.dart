@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+//import 'dart:html';
 import 'package:bubble/bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import "book_info.dart";
 import 'initial-screen.dart';
 import 'main.dart';
 import 'otp_verify_screen.dart';
 
-Future<Set<Marker>> mapfetchpost(lat, lng) async {
+
+Future<Set<Marker>> mapfetchpost(lat, lng, context) async {
   log(dummy_api +
       '/booksnearby/?lat=' +
       Uri.encodeFull(lat.toString()) +
@@ -40,15 +42,23 @@ Future<Set<Marker>> mapfetchpost(lat, lng) async {
           .toString());
       log(jsresp['entities'][entity_dict]['distances'][dictances_dict]['lng']
           .toString());
+      final http.Response response22 = await http.get(jsresp['entities'][entity_dict]["image"]);
       markers.add(Marker(
+        onTap: (){
+          log("tapped marker");
+
+          runApp(BookInfo(
+                  infostuff: jsresp['entities'][entity_dict],
+                ));
+        },
         markerId: MarkerId(jsresp['entities'][entity_dict]["bookname"]),
         position: LatLng(
             jsresp['entities'][entity_dict]['distances'][dictances_dict]['lat'],
             jsresp['entities'][entity_dict]['distances'][dictances_dict]
                 ['lng']),
         //  position: LatLng(0,0),
-        icon: BitmapDescriptor.defaultMarker,
-        infoWindow: InfoWindow(title: "Me"),
+        icon: BitmapDescriptor.fromBytes(response22.bodyBytes),
+        infoWindow: InfoWindow(title: jsresp['entities'][entity_dict]["bookname"]),
       ));
     }
   }
@@ -215,7 +225,6 @@ Future<Map> own_id_info(ownid) async {
 Future<http.Response> login_fetch_post(context, phone) async {
   save_phone(phone);
   log(dummy_api + '/login/?phone=' + Uri.encodeFull(phone));
-  log("login fetchpost is running 233");
   var response = await http
       .get(dummy_api + '/login/?phone=' + Uri.encodeFull(phone));
   Map jsresp = json.decode(response.body);
@@ -284,10 +293,15 @@ Future<http.Response> feedbackfetchpost(feedback, email) async {
       Uri.encodeFull(email));
 }
 
-Future<http.Response> editnamefetchpost() async {
+Future<http.Response> editnamefetchpost(name) async {
   var deviceuid = await read_deviceuid();
+  log(dummy_api + '/editname/?deviceuid=' + Uri.encodeFull(deviceuid)+"&name="+Uri.encodeFull(name));
   var response = await http.get(
-      dummy_api + '/editname/?deviceuid = ' + Uri.encodeFull(deviceuid));
+      dummy_api + '/editname/?deviceuid=' + Uri.encodeFull(deviceuid)+"&name="+Uri.encodeFull(name));
+  var jsresp = json.decode(response.body);
+  if (jsresp["result"] as bool==true){
+    save_name(name);
+  }
 }
 
 Future<http.Response> logoutfetchpost() async {
@@ -327,6 +341,24 @@ Future<http.Response> resendotpfetchpost() async {
   if (jsresp['result'] as bool == false) {
     showtoast(
         "Something unexpected happened. Please report this to mankash.abhimanyu@gmail.com");
+  }
+  else {
+    showtoast( "OTP resent" );
+  }
+}
+
+getnamefetchpost() async {
+  var deviceuid = await read_deviceuid();
+  var deviceuid_encoded = Uri.encodeFull(deviceuid);
+  var response =
+  await http.get(dummy_api + '/getprofileinfo/?deviceuid=' + deviceuid_encoded);
+  Map jsresp = json.decode(response.body);
+  if (jsresp['result'] as bool == false) {
+    showtoast(
+        "Something unexpected happened. Please report this to mankash.abhimanyu@gmail.com");
+  }
+  else {
+    save_name(jsresp["entities"]["name"]);
   }
 }
 
@@ -436,7 +468,7 @@ Future<String> read_name() async {
 
 void firsttwolettersofname() async {
   firstdigs_main = await read_name();
-  firstdigs_main = firstdigs_main.substring(0, 1);
+  firstdigs_main = firstdigs_main.substring(0, 2);
 }
 
 save_latlng(lat, lng) async {

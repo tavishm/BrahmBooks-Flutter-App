@@ -10,9 +10,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'otp_verify_screen.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:convert';
 import 'main.dart';
+
 
 var dummy_api = "192.168.1.110:8000";
 var myControlnamechange = TextEditingController();
@@ -39,6 +39,7 @@ class _profileState extends State<profile> {
     return MaterialApp(
         home: SafeArea(
             child: Scaffold(
+                appBar: CupertinoNavigationBar(middle: Text("My Account")),
                 body: Padding(
       padding: const EdgeInsets.only(top: 60, bottom: 30),
       child: Column(
@@ -76,7 +77,18 @@ class _profileState extends State<profile> {
                       child: RaisedButton(
                           child: Text("Submit"),
                           onPressed: () {
-                            editnamefetchpost();
+                            editnamefetchpost(myControlnamechange.text);
+                            showDialog(context: context,
+                            builder: (_) => AlertDialog(
+                                title: Text('Close the app'),
+                            content: SingleChildScrollView(
+                            child: ListBody(
+                            children: <Widget>[
+                            Text('Close this app to apply changes.'),
+                            ],
+                            ),
+                            ),
+                            ));
                           }),
                     )),
                     Expanded(
@@ -86,6 +98,8 @@ class _profileState extends State<profile> {
                                 child: Text("Logout"),
                                 onPressed: () {
                                   logoutfetchpost();
+                                  save_deviceuid("0");
+                                  runApp(TyApp());
                                 })))
                   ]))),
         ],

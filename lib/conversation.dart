@@ -15,9 +15,10 @@ class ConversationView extends StatefulWidget {
 }
 
 class _ConversationViewState extends State<ConversationView> {
+  //Widget conversationview;
   var infostuff;
   _ConversationViewState(this.infostuff);
-  Widget _conversationview = Center(child: CupertinoActivityIndicator());
+  Widget conversationview = Center(child: CupertinoActivityIndicator());
   @override
   void initState() {
     log(infostuff["interprimeid"].toString());
@@ -28,10 +29,11 @@ class _ConversationViewState extends State<ConversationView> {
   action_function() async {
     conversation_status =
         await interprimeinfofetchpost(infostuff["interprimeid"].toString());
+    log(conversation_status);
     if (conversation_status == "11") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -45,7 +47,7 @@ class _ConversationViewState extends State<ConversationView> {
 
                             textAlign: TextAlign.center)
                     )]))));
-        /*   _conversationview =
+        /*   conversationview =
 
           Column(children: [
             botbubble(Text("I'm waiting for the book owner to reply back.",
@@ -57,7 +59,7 @@ class _ConversationViewState extends State<ConversationView> {
               child: Row(children: [
             ActionChip(
               onPressed: () {
-               /* _conversationview = ListView(children: [
+               /* conversationview = ListView(children: [
                   botbubble(Text(
                       "I'm waiting for the book owner to reply back.",
                       textAlign: TextAlign.left)),
@@ -72,12 +74,11 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "12") {
       setState( () {
-        print( _conversationview );
-        _conversationview = Center(
-            child: Card(
+        print( conversationview );
+        conversationview = Center(child: Card(
               child: Container(
                 margin: const EdgeInsets.all( 10 ),
-                child: ListView( children: [
+                child: Column( children: [
                 Container(
                 margin: const EdgeInsets.all( 5 ),
                 child: Text(
@@ -97,7 +98,7 @@ class _ConversationViewState extends State<ConversationView> {
                   textAlign: TextAlign.center ),
             ),
             ListView.builder(
-              itemCount: infostuff["book2"].length,
+              itemCount: infostuff["book1"].length,
               itemBuilder: (context, index) =>
                   GestureDetector(
                       onTap: () {
@@ -123,13 +124,13 @@ class _ConversationViewState extends State<ConversationView> {
             ),
             CupertinoButton( child: Text( "Not interested" ) , onPressed :() {stagedactionsapi(1,2,interprimeid: infostuff["interprimeid"], interhelpid: infostuff["interhelpid"]);},)
             ] ) ) )
-        );
+            );
       } );
     }    if (conversation_status == "21") {
       setState(() {
         log("21");
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -170,8 +171,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "22") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -189,8 +190,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "31") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -207,9 +208,9 @@ class _ConversationViewState extends State<ConversationView> {
       });
     }
     if (conversation_status == "32") { setState( () {
-        print( _conversationview );
-        _conversationview = Center(
-            child: Card(
+        print( conversationview );
+        conversationview = Center(
+            child: ListView(children: [Card(
               child: Container(
                 margin: const EdgeInsets.all( 10 ),
                 child: ListView( children: [
@@ -232,7 +233,7 @@ class _ConversationViewState extends State<ConversationView> {
                   textAlign: TextAlign.center ),
             ),
             ListView.builder(
-              itemCount: infostuff["book2"].length,
+              itemCount: infostuff["book1"].length,
               itemBuilder: (context, index) =>
                   GestureDetector(
                       onTap: () { stagedactionsapi(3,1,interprimeid: infostuff["interprimeid"], interhelpid: infostuff["interhelpid"], book1: infostuff["bookid"]);},
@@ -257,12 +258,12 @@ class _ConversationViewState extends State<ConversationView> {
             CupertinoButton( child: Text( "Not interested" ), onPressed :() {stagedactionsapi(3,2,interprimeid: infostuff["interprimeid"], interhelpid: infostuff["interhelpid"]);},
 )
             ] ) ) )
-        );
+            ]));
       } );}
     if (conversation_status == "41") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -280,8 +281,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "42") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -299,8 +300,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "51") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -337,8 +338,8 @@ class _ConversationViewState extends State<ConversationView> {
       });
     }
     if (conversation_status == "52") { setState(() {
-      print(_conversationview);
-      _conversationview = Center(
+      print(conversationview);
+      conversationview = Center(
           child: Card(
               child: Container(
                   margin: const EdgeInsets.all(10),
@@ -376,8 +377,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "61") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -395,8 +396,8 @@ class _ConversationViewState extends State<ConversationView> {
     }
     if (conversation_status == "62") {
       setState(() {
-        print(_conversationview);
-        _conversationview = Center(
+        print(conversationview);
+        conversationview = Center(
             child: Card(
                 child: Container(
                     margin: const EdgeInsets.all(10),
@@ -416,13 +417,12 @@ class _ConversationViewState extends State<ConversationView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
             appBar: CupertinoNavigationBar(
               middle: Text(infostuff["show"]),
             ),
             body:
-                _conversationview /*ListView(children: <Widget>[
+                conversationview /*ListView(children: <Widget>[
             Bubble(
                 margin: BubbleEdges.only(top: 10),
                 alignment: Alignment.topRight,
@@ -436,6 +436,6 @@ class _ConversationViewState extends State<ConversationView> {
                       "http://ecx.images-amazon.com/images/I/41RX7hoxFXL.jpg"),
                 ])),
           ])),*/
-            ));
+            );
   }
 }

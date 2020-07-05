@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import "package:flutter/cupertino.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:floating_search_bar/floating_search_bar.dart';
 import 'dart:async';
-import 'package:geolocation/geolocation.dart';
 import 'dart:developer';
 import 'book-info1.dart';
 import 'request.dart';
@@ -13,13 +11,11 @@ import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'account.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'initial-screen.dart';
 import "library.dart";
 import "help.dart";
 import "feedback.dart";
 import "conversation.dart";
-import 'package:speech_bubble/speech_bubble.dart';
 import "book_info.dart";
 final myControlfedback = TextEditingController();
 final myControlhelp = TextEditingController();
@@ -27,7 +23,7 @@ void main() {
   runApp(MyApp());
 }
 
-var firstdigs_main = "AM";
+var firstdigs_main = "";
 
 class MyApp extends StatefulWidget {
   @override
@@ -38,6 +34,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 LatLng _center = LatLng(71.43, 56.43);
 Widget _child;
+
 Set<Marker> markers;
 int _selectedIndex = 0;
 
@@ -68,16 +65,23 @@ class _MyAppState extends State<MyApp> {
       Flexible(flex: 1, child: Center(child: Text("Is location turned on?"))),
     ]);
     super.initState();
-    getCurrentLocation();
     firsttwolettersofname();
+    getCurrentLocation(context);
   }
 
-  void getCurrentLocation() async {
-
+  void getCurrentLocation(scontext) async {
+    var name = await read_name();
+    if (name == ""){
+      getnamefetchpost();
+    }
+    var deviceuid = await read_deviceuid();
+    if (deviceuid=="0"){
+      runApp(TyApp());
+    }
     Position res = await Geolocator().getCurrentPosition();
     log("post res");
     save_latlng(res.latitude, res.longitude);
-    markers = await mapfetchpost(res.latitude, res.longitude);
+    markers = await mapfetchpost(res.latitude, res.longitude, scontext);
     log("post markers");
     setState(() {
       position = res;
@@ -108,7 +112,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget widgetoptions(context, count) {
     List<Widget> _widgetOptions = <Widget>[
-      Stack(
+    Stack(
         children: <Widget>[
           // Replace this container with your Map widget
           Container(
@@ -507,6 +511,7 @@ class mylibrary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CupertinoNavigationBar(middle: Text("My Library")),
         body: FutureBuilder(
             future: mylibraryfetchpost(),
             builder: (context, snapshot) {

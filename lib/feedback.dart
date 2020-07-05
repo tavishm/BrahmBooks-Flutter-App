@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import "package:flutter/cupertino.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:floating_search_bar/floating_search_bar.dart';
 import 'dart:async';
-import 'package:geolocation/geolocation.dart';
 import 'dart:developer';
 import 'utils.dart';
 import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'initial-screen.dart';
 
 final myControlfeedback = TextEditingController();

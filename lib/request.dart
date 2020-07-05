@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import "package:flutter/cupertino.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:floating_search_bar/floating_search_bar.dart';
 import 'dart:async';
-import 'package:geolocation/geolocation.dart';
 import 'dart:developer';
 import 'book-info1.dart';
 import 'utils.dart';
@@ -12,7 +10,6 @@ import 'initial-screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'account.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'initial-screen.dart';
 import "library.dart";
 import "help.dart";
@@ -50,7 +47,7 @@ class _MyAppState extends State<MyApp> {
     Position res = await Geolocator().getCurrentPosition();
     log("post res");
     save_latlng(res.latitude, res.longitude);
-    markers = await mapfetchpost(res.latitude, res.longitude);
+    markers = await mapfetchpost(res.latitude, res.longitude, context);
     log("post markers");
     setState(() {
       position = res;

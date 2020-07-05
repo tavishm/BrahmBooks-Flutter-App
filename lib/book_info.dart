@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter/cupertino.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "utils.dart";
+import "main.dart";
 import 'Book_Map.dart';
 
 void main() {
@@ -15,8 +16,9 @@ class BookInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(home: Scaffold(
         appBar: CupertinoNavigationBar(
+
             middle: Text(
           infostuff["bookname"],
         ),
@@ -81,6 +83,6 @@ class BookInfo extends StatelessWidget {
           )*/
    //     ]),
       //),
-    );
+    ));
   }
 }
