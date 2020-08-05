@@ -530,7 +530,7 @@ class mylibrary extends StatelessWidget {
                           child: Card(
                               child: Row(children: <Widget>[
                             Image.network(snapshot.data[index]["image"],
-                                height: double.infinity),
+                                height: double.ivysnfinity),
                             Column(children: [
                               Center(
                                   child: Column(children: [
