@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # brahm_books
 
 Books Sharing
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# BrahmBooks
+Code for Brahm Books Android App. Share and exchange books in your neighbourhood. Code is from 3 years ago. 
+>>>>>>> origin/main
